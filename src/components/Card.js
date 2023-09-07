@@ -1,30 +1,24 @@
-import { Nav, Row, Col } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 
-function Card({ navigate, data }) {
+function Card({ navigate, item, index }) {
   return (
-    <Row>
-      {data.map((item, index) => {
-        return (
-          <Col key={index}>
-            <Nav.Link>
-              <img
-                src={`https://codingapple1.github.io/shop/shoes${
-                  index + 1
-                }.jpg`}
-                alt=""
-                width="80%"
-                onClick={() => {
-                  navigate(`detail/${index}`);
-                }}
-              />
-            </Nav.Link>
-            <h4>{item.title}</h4>
-            <p>{item.content}</p>
-            <p>{item.price}원</p>
-          </Col>
-        );
-      })}
-    </Row>
+    <div className="col-md-4">
+      <Nav.Link
+        onClick={() => {
+          navigate(`detail/${item.id}`);
+        }}
+      >
+        <img
+          src={`https://codingapple1.github.io/shop/shoes${index + 1}.jpg`}
+          alt=""
+          width="80%"
+        />
+
+        <h5>{item.title}</h5>
+        <p>{item.content}</p>
+        <p>{item.price}원</p>
+      </Nav.Link>
+    </div>
   );
 }
 

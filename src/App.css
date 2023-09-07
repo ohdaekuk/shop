@@ -1,6 +1,34 @@
+.start {
+  transform: scale(0);
+}
+
+.end {
+  transform: scale(1);
+  transition: all 0.5s;
+}
+
+.detailStart {
+  opacity: 0;
+}
+
+.detailEnd {
+  opacity: 1;
+  transition: all 1s;
+}
+
+.loading-box {
+  background: gray;
+  text-align: center;
+  width: 400px;
+  height: 130px;
+  line-height: 130px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
 .main-bg {
   height: 25rem;
-  background-image: url("./assets/image/cute.jpg");
+  background-image: url('./assets/image/cute.jpg');
   background-size: cover;
   background-position: center;
 }
