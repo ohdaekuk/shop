@@ -1,3 +1,7 @@
+td {
+  width: 10%;
+}
+
 .start {
   transform: scale(0);
 }

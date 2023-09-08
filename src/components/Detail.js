@@ -1,6 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
+
+import { useDispatch } from 'react-redux';
+
+import { addContent } from '../store/cartSlice';
 
 // import styled from "styled-components";
 
@@ -20,7 +24,11 @@ import { Nav } from 'react-bootstrap';
 // useEffect(()=>{},[변수]) 특정 변수 변경시에 코드 실행
 
 function Detail({ shoes }) {
+  const inputRef = useRef();
+
   const { id } = useParams(); // router params
+
+  const dispatch = useDispatch();
 
   const [warn, setWarn] = useState(true);
   const [input, setInput] = useState('');
@@ -30,11 +38,40 @@ function Detail({ shoes }) {
 
   let findItem = shoes.find((a) => a.id === Number(id));
 
-  useEffect(() => {
-    setDetailFade('detailEnd');
-  }, []);
+  const enterCheck = (event, item, type) => {
+    if (event.key === 'Enter' && type === 'input') {
+      if (input !== '') {
+        dispatch(
+          addContent({
+            id: item.id,
+            title: item.title,
+            count: Number(input),
+          }),
+        );
+        alert('장바구니에 추가되었습니다.');
+      } else {
+        alert('수량을 입력해주세요');
+      }
+    } else if (type === 'button') {
+      if (input !== '') {
+        dispatch(
+          addContent({
+            id: item.id,
+            title: item.title,
+            count: Number(input),
+          }),
+        );
+        alert('장바구니에 추가되었습니다.');
+      } else {
+        alert('수량을 입력해주세요');
+      }
+    }
+  };
 
   useEffect(() => {
+    setDetailFade('detailEnd');
+    inputRef.current.focus();
+
     let timer = setTimeout(() => {
       setWarn(false);
     }, 2000);
@@ -69,16 +106,28 @@ function Detail({ shoes }) {
         </div>
         <div className="col-md-6">
           <input
+            placeholder="수량 입력"
+            ref={inputRef}
             style={{ marginTop: '30px' }}
             value={input}
             onChange={(e) => {
               setInput(e.target.value.trim());
             }}
+            onKeyDown={(e) => {
+              enterCheck(e, findItem, 'input');
+            }}
           />
           <h4 className="pt-5">{findItem.title}</h4>
           <p>{findItem.content}</p>
           <p>{findItem.price}원</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button
+            className="btn btn-danger"
+            onClick={(e) => {
+              enterCheck(e, findItem, 'button');
+            }}
+          >
+            주문하기
+          </button>
         </div>
       </div>
 
