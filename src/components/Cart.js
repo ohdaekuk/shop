@@ -26,10 +26,6 @@ function Cart() {
     }
   };
 
-  useEffect(() => {
-    console.log(deleteIndex);
-  }, [deleteIndex]);
-
   return (
     <div>
       <h5>
