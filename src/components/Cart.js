@@ -1,12 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addAge, updateName } from '../store/userSlice';
 import { updateCount, removeContent, removeContents } from '../store/cartSlice';
+import styled from 'styled-components';
+
+const CartButton = styled.button`
+  margin-bottom: 10px;
+`;
 
 function Cart() {
-  const state = useSelector((state) => state);
+  const { product } = useSelector((state) => state.cart);
+  const { age, name } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
 
   const [deleteIndex, setDeleteIndex] = useState([]);
@@ -29,16 +36,15 @@ function Cart() {
   return (
     <div>
       <h5>
-        {state.user.age}살 {state.user.name}의 장바구니
+        {age}살 {name}의 장바구니
       </h5>
-      <button
-        style={{ marginBottom: '10px' }}
+      <CartButton
         onClick={() => {
           dispatch(addAge());
         }}
       >
         나이먹기
-      </button>
+      </CartButton>
       <div className="main-bg" />
       <Table>
         <thead>
@@ -52,8 +58,8 @@ function Cart() {
           </tr>
         </thead>
         <tbody>
-          {state.cart
-            ? state.cart.map((item, index) => {
+          {product
+            ? product.map((item, index) => {
                 return (
                   <tr key={index}>
                     <td>{item.id}</td>

@@ -1,17 +1,36 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import axios from 'axios';
 
 import Card from './Card';
+import RecentView from './RecentView';
 
 function Home({ shoes, navigate, addData }) {
   const [showButton, setShowButton] = useState(true);
   const [apiCount, setApiCount] = useState(2);
   const [apiLoading, setApiLoading] = useState(false);
+  const [recentId, setRecentId] = useState([]);
+
+  const checkRecentId = useCallback(() => {
+    if (!recentId) {
+      localStorage.setItem('watched', JSON.stringify([]));
+    }
+  }, [recentId]);
+
+  useEffect(() => {
+    setRecentId(JSON.parse(localStorage.getItem('watched')));
+  }, []);
+
+  useEffect(() => {
+    checkRecentId();
+  }, [checkRecentId]);
 
   return (
     <>
       <div className="main-bg" />
+
+      {recentId ? <RecentView navigate={navigate} recentId={recentId} /> : null}
+
       <div className="container">
         {apiLoading ? (
           <div className="loading-box">
@@ -29,6 +48,7 @@ function Home({ shoes, navigate, addData }) {
           ))}
         </div>
       </div>
+
       {showButton ? (
         <button
           onClick={async () => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 
@@ -24,7 +24,8 @@ import { addContent } from '../store/cartSlice';
 // useEffect(()=>{},[변수]) 특정 변수 변경시에 코드 실행
 
 function Detail({ shoes }) {
-  const inputRef = useRef();
+  // 특정 DOM 요소에 접근할 때 사용 => useRef()
+  const inputRef = useRef(null);
 
   const { id } = useParams(); // router params
 
@@ -37,6 +38,37 @@ function Detail({ shoes }) {
   const [detailFade, setDetailFade] = useState('');
 
   let findItem = shoes.find((a) => a.id === Number(id));
+
+  const setStorage = useCallback(() => {
+    let localWatched = JSON.parse(localStorage.getItem('watched'));
+
+    if (localWatched) {
+      // findIndex를 이용한 중복 제거
+
+      // const index = localWatched.findIndex((item) => item === findItem.id);
+
+      // if (index === -1) {
+      //   localWatched.push(findItem.id);
+      // }
+
+      // =======================================================================
+
+      // Set을 이용한 중복 제거
+
+      localWatched.push(findItem.id);
+
+      localWatched = new Set(localWatched);
+      localWatched = Array.from(localWatched);
+
+      localStorage.setItem('watched', JSON.stringify(localWatched));
+    } else {
+      localStorage.setItem('watched', JSON.stringify([]));
+      localWatched = JSON.parse(localStorage.getItem('watched'));
+
+      localWatched.push(findItem.id);
+      localStorage.setItem('watched', JSON.stringify(localWatched));
+    }
+  }, [findItem.id]);
 
   const enterCheck = (event, item, type) => {
     if (event.key === 'Enter' && type === 'input') {
@@ -76,10 +108,12 @@ function Detail({ shoes }) {
       setWarn(false);
     }, 2000);
 
+    setStorage();
+
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [setStorage]);
 
   useEffect(() => {
     if (isNaN(input) === true) {

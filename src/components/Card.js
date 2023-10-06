@@ -1,4 +1,9 @@
-import { Nav } from "react-bootstrap";
+import { Nav } from 'react-bootstrap';
+import styled from 'styled-components';
+
+const CardImage = styled.img`
+  width: 80%;
+`;
 
 function Card({ navigate, item, index }) {
   return (
@@ -8,10 +13,9 @@ function Card({ navigate, item, index }) {
           navigate(`detail/${item.id}`);
         }}
       >
-        <img
+        <CardImage
           src={`https://codingapple1.github.io/shop/shoes${index + 1}.jpg`}
           alt=""
-          width="80%"
         />
 
         <h5>{item.title}</h5>
